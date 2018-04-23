@@ -83,6 +83,9 @@ class VASTParser
             if node.nodeName is 'Ad'
                 ad = @parseAdElement node
                 if ad?
+                    if options.determinedSequence?
+                        ad.sequence = options.determinedSequence
+
                     response.ads.push ad
                 else
                     # VAST version of response not supported.
@@ -122,6 +125,7 @@ class VASTParser
                     # Get full URL if url is defined
                     ad.nextWrapperURL = @resolveVastAdTagURI(ad.nextWrapperURL, url)
 
+                options.determinedSequence = ad.sequence
                 @_parse ad.nextWrapperURL, parentURLs, options, (err, wrappedResponse) =>
                     errorAlreadyRaised = false
                     if err?
